@@ -1,0 +1,120 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+// Classe Animal para representar um animal no sistema
+class Animal {
+    private String nome;
+    private int idade;
+    private String especie;
+    private boolean disponivel;
+
+    public Animal(String nome, int idade, String especie) {
+        this.nome = nome;
+        this.idade = idade;
+        this.especie = especie;
+        this.disponivel = true;  // Animais são inicialmente disponíveis para adoção
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public int getIdade() {
+        return idade;
+    }
+
+    public String getEspecie() {
+        return especie;
+    }
+
+    public boolean isDisponivel() {
+        return disponivel;
+    }
+
+    public void adotar() {
+        this.disponivel = false;
+    }
+
+    @Override
+    public String toString() {
+        return "Nome: " + nome + " | Idade: " + idade + " anos | Espécie: " + especie + " | Disponível: " + (disponivel ? "Sim" : "Não");
+    }
+}
+
+// Classe principal para o sistema de adoção de animais
+public class SistemaAdocao {
+    private static ArrayList<Animal> animais = new ArrayList<>();
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Populando a lista de animais
+        animais.add(new Animal("Luna", 3, "Cachorro"));
+        animais.add(new Animal("Mingau", 2, "Gato"));
+        animais.add(new Animal("Bolt", 5, "Cachorro"));
+        animais.add(new Animal("Kiara", 1, "Gato"));
+        animais.add(new Animal("Blue", 2, "Papagaio"));
+
+        System.out.println("Bem-vindo ao Sistema de Adoção de Animais!");
+
+        boolean rodando = true;
+        while (rodando) {
+            System.out.println("\nSelecione uma opção:");
+            System.out.println("1. Ver lista de animais disponíveis");
+            System.out.println("2. Adotar um animal");
+            System.out.println("3. Sair");
+
+            int opcao = scanner.nextInt();
+            scanner.nextLine(); // Limpar buffer
+
+            switch (opcao) {
+                case 1:
+                    listarAnimaisDisponiveis();
+                    break;
+                case 2:
+                    adotarAnimal(scanner);
+                    break;
+                case 3:
+                    rodando = false;
+                    System.out.println("Obrigado por utilizar o sistema. Até mais!");
+                    break;
+                default:
+                    System.out.println("Opção inválida! Tente novamente.");
+                    break;
+            }
+        }
+
+        scanner.close();
+    }
+
+    // Função para listar todos os animais disponíveis para adoção
+    private static void listarAnimaisDisponiveis() {
+        System.out.println("\nAnimais disponíveis para adoção:");
+        for (Animal animal : animais) {
+            if (animal.isDisponivel()) {
+                System.out.println(animal);
+            }
+        }
+    }
+
+    // Função para realizar a adoção de um animal
+    private static void adotarAnimal(Scanner scanner) {
+        System.out.println("\nDigite o nome do animal que deseja adotar:");
+        String nome = scanner.nextLine();
+
+        Animal animalAdotado = null;
+        for (Animal animal : animais) {
+            if (animal.getNome().equalsIgnoreCase(nome) && animal.isDisponivel()) {
+                animalAdotado = animal;
+                break;
+            }
+        }
+
+        if (animalAdotado != null) {
+            animalAdotado.adotar();
+            System.out.println("Parabéns! Você adotou " + animalAdotado.getNome() + ".");
+        } else {
+            System.out.println("Desculpe, esse animal não está disponível para adoção ou não existe.");
+        }
+    }
+}
